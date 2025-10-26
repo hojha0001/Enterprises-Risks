@@ -9,28 +9,24 @@
             "args": [
                 "app.main:app",
                 "--reload",
+                "--host",
+                "0.0.0.0",
                 "--port",
                 "8000",
-                "--host",
-                "127.0.0.1",
                 "--log-level",
                 "debug"
             ],
             "cwd": "${workspaceFolder}/Services/api",
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/Services/api",
-                "DEBUG": "1",
-                "ENVIRONMENT": "development",
-                "PYTHONDONTWRITEBYTECODE": "1",
-                "PYTHONUNBUFFERED": "1"
+                "APP_ENV": "development",
+                "DEBUG": "1"
             },
             "console": "integratedTerminal",
-            "purpose": ["debug-in-terminal"],
+            "jinja": true,
             "justMyCode": false,
-            "showReturnValue": true,
             "stopOnEntry": false,
-            "redirectOutput": true,
-            "subProcess": true
+            "purpose": ["debug-in-terminal"]
         },
         {
             "name": "Python: Streamlit",
@@ -43,38 +39,53 @@
                 "--server.port",
                 "8501",
                 "--server.address",
-                "127.0.0.1",
-                "--logger.level=info",
-                "--browser.serverPort=8501",
-                "--server.headless=true",
-                "--browser.gatherUsageStats=false"
+                "0.0.0.0",
+                "--browser.serverAddress",
+                "localhost",
+                "--server.headless",
+                "true",
+                "--logger.level",
+                "debug"
             ],
             "cwd": "${workspaceFolder}/webapp",
             "env": {
-                "PYTHONPATH": "${workspaceFolder}",
-                "DEBUG": "1",
-                "ENVIRONMENT": "development",
-                "PYTHONDONTWRITEBYTECODE": "1",
-                "PYTHONUNBUFFERED": "1"
+                "STREAMLIT_ENV": "development",
+                "DEBUG": "1"
             },
             "console": "integratedTerminal",
-            "purpose": ["debug-in-terminal"],
             "justMyCode": false,
-            "showReturnValue": true,
             "stopOnEntry": false,
-            "redirectOutput": true,
-            "subProcess": true
+            "purpose": ["debug-in-terminal"]
+        },
+        {
+            "name": "Python: FastAPI Production",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "app.main:app",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8000",
+                "--workers",
+                "4",
+                "--log-level",
+                "info"
+            ],
+            "cwd": "${workspaceFolder}/Services/api",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/Services/api",
+                "APP_ENV": "production"
+            },
+            "console": "integratedTerminal",
+            "justMyCode": true
         }
     ],
     "compounds": [
         {
-            "name": "Full Stack: FastAPI + Streamlit",
+            "name": "FastAPI + Streamlit (Development)",
             "configurations": ["Python: FastAPI", "Python: Streamlit"],
-            "presentation": {
-                "hidden": false,
-                "group": "development",
-                "order": 1
-            },
             "stopAll": true
         }
     ]
