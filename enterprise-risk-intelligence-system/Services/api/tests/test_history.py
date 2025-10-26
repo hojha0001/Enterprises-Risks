@@ -24,11 +24,11 @@ def test_history_roundtrip():
     assert 'score' in body
 
     # query history for that client
-    r2 = client.get('/risk/history', params={'client_id': 'hist-test'})
+    r2 = client.get('/history/timeseries', params={'entity_id': 'hist-test'})
     assert r2.status_code == 200
     data = r2.json()
     assert isinstance(data, list)
     assert len(data) >= 1
     first = data[0]
-    assert first['client_id'] == 'hist-test'
+    assert first['entity_id'] == 'hist-test'
     assert 'score' in first

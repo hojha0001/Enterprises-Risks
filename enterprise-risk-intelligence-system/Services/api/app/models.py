@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, Dict, Any
-from sqlalchemy import JSON
+from sqlalchemy import JSON, Index
 from sqlmodel import Field, SQLModel
 
 
@@ -46,3 +46,17 @@ class RiskHistoryRead(SQLModel):
     timestamp: datetime
     score: float
     risk_factors: Optional[Dict[str, Any]] = None
+
+
+# New canonical time-series record for dashboarding
+class RiskRecord(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    entity_id: str = Field(index=True)
+    score: float = Field(index=True)
+    model: Optional[str] = None
+    label: Optional[str] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
+
+
+# Add a compound index for faster queries by entity and time
+__table_args__ = (Index("ix_entity_time", "entity_id", "created_at"),)
